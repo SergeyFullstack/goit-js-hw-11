@@ -35,8 +35,8 @@ const loadMorePhotos = async function (entries, observer) {
     if (entry.isIntersecting) {
       observer.unobserve(entry.target);
       pixaby.incrementPage();
+        spinnerPlay();
 
-      spinnerPlay();
 
       try {
         spinnerPlay();
@@ -45,11 +45,19 @@ const loadMorePhotos = async function (entries, observer) {
         const markup = createMarkup(hits);
         refs.gallery.insertAdjacentHTML('beforeend', markup);
 
-          if (pixaby.hasMorePhotos) {
+          
+        if (pixaby.hasMorePhotos) {
           const lastItem = document.querySelector('.gallery a:last-child');
-          observer.observe(lastItem);
-        } else
-          Notify.info(
+          observer.observe(lastItem)
+
+        }
+        if (entry.isIntersecting) {
+          observer.unobserve(entry.target);
+                 
+        } 
+        
+        else
+         Notify.info(
             "We're sorry, but you've reached the end of search results.",
             notifyInit
           );
@@ -139,6 +147,7 @@ const onLoadMore = async () => {
     refs.gallery.insertAdjacentHTML('beforeend', markup);
 
     modalLightboxGallery.refresh();
+    
   } catch (error) {
     Notify.failure(error.message, 'Something went wrong!', notifyInit);
 
